@@ -114,8 +114,6 @@ have it — I would rather see the export than a rounded summary.
 ** D. Training history
 - Years running and recent trajectory (building / flat / coming back): »… «
 - Any layoffs or returns (when, how long, why): »… «
-- Starting from scratch, or less than ~2 months of regular running right now?
-  (if yes, the plan starts with a walk/run on-ramp — §15): »… «
 - Cross-training that loads the legs — cycling, skiing, lifting — and rough
   amount (it counts toward leg fatigue): »… «
 
@@ -155,9 +153,12 @@ have it — I would rather see the export than a rounded summary.
 3. *Set the intensity model.* Convert their HR data into concrete Z2 bpm ranges and
    a low-Z2 long-run range. If they lack a threshold test, propose a safe estimate
    and say explicitly it's provisional.
-4. *Build the progression.* If the on-ramp rule (§15) applies, phase one of the
-   plan IS Programme fractionné 1 — schedule it explicitly with its exit
-   criterion, and start week 1 of the volume build only after it. Then apply
+4. *Build the progression.* First decide whether the on-ramp rule (§15)
+   applies — infer it from sections B, D and E (near-zero recent volume, a
+   fresh return from layoff or injury, or brand-new to running); if the
+   picture is ambiguous, ask. When it applies, phase one of the plan IS
+   Programme fractionné 1 — schedule it explicitly with its exit criterion,
+   and start week 1 of the volume build only after it. Then apply
    the duration caps (§5), the 10% rule (§4), and a deload every 3rd week (§6). Show the resulting weekly long-run times/distances
    and approximate weekly volume. Make the peak long run a sane fraction of the
    week; don't let a single session dominate except at the very peak.
