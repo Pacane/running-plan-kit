@@ -163,6 +163,31 @@ ANNOTATIONS = {
                     "needling room to settle. Small decisions, correctly "
                     "sequenced.",
     },
+    "2026-07-16": {
+        "keywords": ["moved up"],
+        "note": "Saturday's long run, moved to Thursday (weekend conflict) "
+                "and taken to the trails — where it became part run, part "
+                "orienteering: lots of stops to find the track.",
+        "analysis": "The deload long run, relocated to Thursday and taken "
+                    "off-road — where it turned into an orienteering "
+                    "session: repeated stops to relocate the track kept the "
+                    "average HR at 114 with 93 % of the hour in Zone 1, "
+                    "never even brushing the Z2 ceiling. For a deload, "
+                    "that's not a bug: 55 minutes of time-on-feet on varied "
+                    "terrain at near-zero intensity is exactly what an "
+                    "absorption week wants — and honest UTFS prep besides, "
+                    "since that race will also be about terrain management, "
+                    "not pace. The 8:54/km means nothing; the 150 spm "
+                    "cadence says plenty of walking, which the climbs and "
+                    "the map-checking explain. Week 3 closes around 25 km "
+                    "of a ~28 target. The morning told its own story "
+                    "though: the first clean post-needling read came in at "
+                    "3/10 — both feet, the highest of the block, after the "
+                    "plan's densest stretch of consecutive running days — "
+                    "and the right arch murmured at 0.5–1 through the run. "
+                    "Friday's rest lands well; the weekend mornings decide "
+                    "whether week 4 opens at full prescription.",
+    },
     "2026-07-15": {
         "note": "Deload medium-long, right on the 36-minute cap. Morning "
                 "markers agree the recovery is landing: resting HR 40, "
@@ -175,6 +200,20 @@ ANNOTATIONS = {
                     "holds, the week-4 progression gate is opening.",
     },
 }
+
+# One-off session moves within a week (life happens): date -> agenda-style
+# dict replacing the scheduled session when analyzing that day's run.
+SESSION_OVERRIDES = {
+    "2026-07-16": {"title": "Long run 60' Z2", "tag": "long"},  # Sat -> Thu, trail
+}
+
+
+def planned_by_date(sessions):
+    d = {s["date"]: s for s in sessions}
+    for iso, sess in SESSION_OVERRIDES.items():
+        d[dt.date.fromisoformat(iso)] = sess
+    return d
+
 
 RUN_HEAD = re.compile(
     r"^\* (\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}) — (.+?) \((\w+)\)\s+\(id (\S+)\)"
@@ -233,6 +272,8 @@ def keywords(run, sess=None):
             break
     if label.startswith("optional"):
         kws.append("optional")
+    if run.get("sport") == "TrailRun":
+        kws.append("trail")
     wk = WEEKS.get(week_no(run["date"]))
     if wk and "deload" in wk[0]:
         kws.append("deload")
@@ -301,7 +342,7 @@ def fmt_run(run, sess):
 
 def write_log(runs, sessions):
     today = dt.date.today()
-    planned = {s["date"]: s for s in sessions}
+    planned = planned_by_date(sessions)
     by_week = {}
     for r in runs:
         by_week.setdefault(week_no(r["date"]), []).append(r)
@@ -483,7 +524,7 @@ def write_run_posts(runs, sessions):
     outdir.mkdir(parents=True, exist_ok=True)
     for old in outdir.glob("*.md"):
         old.unlink()
-    planned = {s["date"]: s for s in sessions}
+    planned = planned_by_date(sessions)
     for r in runs:
         sess = planned.get(r["date"])
         label = session_label(r, sess).replace("'", "′")
