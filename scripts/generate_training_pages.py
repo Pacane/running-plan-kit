@@ -428,6 +428,8 @@ format. Fill in the `YOUR INTAKE` section with your own history (real
 export data beats self-estimates), paste the entire thing into a
 conversation with an AI like Claude, and answer its follow-up
 questions honestly. Background: [how this works](/posts/how-this-works/).
+Template, scripts and Claude skills are bundled on GitHub:
+[Pacane/running-plan-kit](https://github.com/Pacane/running-plan-kit).
 
 It produces a self-coached training plan, not medical advice.
 
@@ -455,10 +457,11 @@ PUBLIC_SCRIPTS = [
      "(Yes, it publishes itself.)"),
 ]
 # Stored reversed so the guard doesn't trip on its own source when the
-# generator publishes itself.
+# generator publishes itself. (The GitHub handle is deliberately public —
+# the kit repo is linked from the tools page — so it's not in this list.)
 FORBIDDEN = [w[::-1] for w in
              ["524926i", "leoj", "revarb", "siocebeuqmai", "reittort",
-              "enacap", "liamg@", "yaneugas"]]
+              "liamg@", "yaneugas"]]
 
 
 def publish_scripts():
@@ -486,7 +489,9 @@ summary = "The three Python scripts behind this whole setup — intervals.icu sy
 +++
 
 The plumbing described in [how this works](/posts/how-this-works/), as
-plain downloadable Python. No packaging, no framework — read them top to
+plain downloadable Python — also on GitHub with the prompt template and
+the Claude skills bundled:
+[Pacane/running-plan-kit](https://github.com/Pacane/running-plan-kit). No packaging, no framework — read them top to
 bottom, adapt to your own plan (the structure they expect comes from the
 [prompt template](/running/prompt-template/)). They hold no credentials:
 API keys come from the environment or Emacs auth-source, the Garmin OAuth
