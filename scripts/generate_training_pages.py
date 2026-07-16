@@ -44,32 +44,86 @@ WEEKS = {
     18: ("recovery", 34, "12–15 km recovery"),
 }
 
-# date -> {"keywords": [...], "note": "..."}  — HAND-EDIT ME
+# date -> {"keywords": [...], "note": "...", "analysis": "..."} — HAND-EDIT ME
+# note: 1-2 sentences (timeline + post). analysis: the coach's read, a
+# fuller paragraph shown only on the single-run post.
 ANNOTATIONS = {
-    "2026-06-29": {"note": "Day 1 of the plan."},
+    "2026-06-29": {
+        "note": "Day 1 of the plan.",
+        "analysis": "Day one, and the baseline fault is already on tape: an "
+                    "\"easy\" run with 39 % of its time above Zone 2. Average "
+                    "HR 140 sits inside the band, but the drift to 158 says "
+                    "the effort was managed by feel, not by the cap. This is "
+                    "precisely the habit the whole plan is built to retrain.",
+    },
+    "2026-06-30": {
+        "analysis": "The optional Tuesday got used, which is fine — but it "
+                    "repeated Monday's pattern almost exactly: 39 % above "
+                    "Zone 2, max HR touching 164. Two warm \"easy\" runs in "
+                    "two days is how invisible fatigue accumulates; the "
+                    "volume isn't the risk here, the intensity creep is.",
+    },
     "2026-07-01": {
         "keywords": ["volume creep"],
         "note": "Week-1 medium-long — 10 km where ~8 was planned, part of a "
                 "42 km week against a ~35 km target.",
+        "analysis": "The week-1 medium-long pulled both levers at once: well "
+                    "over its scheduled duration and 42 % of it above Zone 2. "
+                    "Aerobically it looked comfortable, which is exactly why "
+                    "it's seductive — \"one variable at a time\" exists "
+                    "because tissue doesn't negotiate. Most of week 1's "
+                    "volume overshoot (42 km against ~35) traces to sessions "
+                    "like this one.",
+    },
+    "2026-07-02": {
+        "analysis": "Marginally better discipline than the two runs before "
+                    "it (34 % above Zone 2), but the same signature: honest "
+                    "effort, cap ignored late. The engine keeps making these "
+                    "runs feel cheap; the plantar fascia doesn't get a vote — "
+                    "until it does.",
     },
     "2026-07-04": {
         "keywords": ["milestone"],
         "note": "First long run of the plan. Decoupling 0.7 % — the aerobic "
                 "engine is fine; the work is discipline, not fitness.",
+        "analysis": "The week's redemption: 72:04 on a 72-minute cap, 76 % "
+                    "Zone 2, and aerobic decoupling of 0.7 % — essentially a "
+                    "flat line. When pace is allowed to be an output instead "
+                    "of a target, the data is immaculate. The aerobic base "
+                    "was never the question; the discipline on the other "
+                    "five days of the week is.",
     },
     "2026-07-06": {
         "note": "First genuinely easy easy-run of the plan (78 % Z2), in 31 °C. "
                 "Strength A in the evening — strength habit starts.",
+        "analysis": "First run after the volume reckoning, and the correction "
+                    "landed: 78 % Zone 2 in 31 °C — heat that usually drags "
+                    "HR upward makes the discipline more impressive, not "
+                    "less. Strength A in the evening started the other half "
+                    "of the plan. This is what week 1 should have looked "
+                    "like.",
     },
     "2026-07-08": {
         "keywords": ["model run"],
         "note": "Controlled medium-long: pace dead-steady 5:58→5:55→5:55, "
                 "85 % Z2. What the plan is supposed to look like.",
+        "analysis": "A model session, arguably the cleanest of the plan: 85 % "
+                    "Zone 2, pace dead-steady at 5:58→5:55→5:55, duration on "
+                    "the cap. The foot ached at the start, went quiet by "
+                    "minute eight, and the unwavering splits prove no "
+                    "compensation crept into the gait. File under \"what the "
+                    "plan looks like when followed.\"",
     },
     "2026-07-09": {
         "note": "Slightly hot toward the end — the easy-too-hard creep to "
                 "watch. Strength B in the evening: first week with both "
                 "strength sessions done.",
+        "analysis": "Good, not great: 75 % Zone 2 with a warm patch mid-run "
+                    "and drift toward the cap by the end — the easy-too-hot "
+                    "creep announcing itself again, gently. The evening's "
+                    "Strength B closed the first week with both strength "
+                    "sessions done, which matters more for October than any "
+                    "single run does.",
     },
     "2026-07-11": {
         "keywords": ["off-plan"],
@@ -78,21 +132,47 @@ ANNOTATIONS = {
                 "legs. Aerobically fine (4.7 % decoupling), and the foot "
                 "passed every checkpoint afterwards. Bent, didn't break — "
                 "and doesn't get to become a habit.",
+        "analysis": "Off-plan by every metric that matters: +28 % over the "
+                    "duration cap, 74 % Zone 3, at the fast-flat profile "
+                    "that has historically preceded every flare. The engine "
+                    "shrugged — 4.7 % decoupling on the biggest run of the "
+                    "block. The redeeming data came after: the foot passed "
+                    "every checkpoint, including the best morning of the "
+                    "episode two days later — evidence the current load "
+                    "sits inside tissue capacity, with some margin. Noted, "
+                    "absorbed, and explicitly not a precedent.",
     },
     "2026-07-13": {
         "keywords": ["best discipline"],
         "note": "91 % Z2 — best zone discipline of the plan, on day 1 of a "
                 "deliberately strict deload week.",
+        "analysis": "91 % Zone 2 — the best zone discipline of the plan, "
+                    "delivered on day one of a deliberately strict deload. "
+                    "After Saturday's excursion, this is the response that "
+                    "matters: no compensating, no testing, just the "
+                    "prescription. A deload only works if it's actually a "
+                    "deload.",
     },
     "2026-07-14": {
         "note": "Recovery-pace shakeout at HR 119, 98 % Zone 1 — deload "
                 "executed like it means it. Strength A in the evening, "
                 "one day late after Monday's dry-needling session.",
+        "analysis": "An optional day used correctly: 98 % Zone 1 at HR 119 — "
+                    "a genuine recovery jog, not a stealth workout. Strength "
+                    "A in the evening, one day late to give Monday's dry "
+                    "needling room to settle. Small decisions, correctly "
+                    "sequenced.",
     },
     "2026-07-15": {
         "note": "Deload medium-long, right on the 36-minute cap. Morning "
                 "markers agree the recovery is landing: resting HR 40, "
                 "HRV back to 66.",
+        "analysis": "Three for three on the deload: 37:30 against a "
+                    "36-minute cap, 78 % Zone 2, and the morning markers "
+                    "agreeing loudly — resting HR 40 and HRV back at 66 are "
+                    "the best readings of the block. The recovery isn't just "
+                    "scheduled; it's landing. If the foot's morning trend "
+                    "holds, the week-4 progression gate is opening.",
     },
 }
 
@@ -172,9 +252,6 @@ def run_minutes(t):
 
 
 def execution_line(run, sess):
-    z = run["zones"]
-    zstr = " / ".join(f"{z[k]} % {k}" for k in ("Z1", "Z2", "Z3", "Z4", "Z5")
-                      if z.get(k))
     if sess and sess["tag"] == "race":
         plan = "race day — controlled effort, not raced"
     elif sess and (m := re.search(r"(\d+)' Z2", sess["title"])):
@@ -183,17 +260,39 @@ def execution_line(run, sess):
         plan = f"plan {pm}′ Z2 → ran {run['time']} ({delta:+.0f} %)"
     else:
         plan = "optional day, nothing scheduled"
-    return f"*Execution: {plan} · {zstr} · HR {run['hr']} avg (Z2 cap 145)*"
+    return f"*Execution: {plan} · HR {run['hr']} avg (Z2 cap 145)*"
+
+
+def zone_band(run):
+    """Garmin-style time-in-zones band: stacked colored segments Z1→Z5."""
+    z = run["zones"]
+    parts, alt = [], []
+    for k in ("Z1", "Z2", "Z3", "Z4", "Z5"):
+        pct = z.get(k, 0)
+        if not pct:
+            continue
+        alt.append(f"{k} {pct} %")
+        label = f"{k} {pct}%" if pct >= 14 else (f"{pct}%" if pct >= 8 else "")
+        parts.append(f'<span class="zb zb-{k.lower()}" style="width:{pct}%"'
+                     f' title="{k}: {pct} %">{label}</span>')
+    return (f'<div class="zoneband" role="img" aria-label="Time in zones: '
+            f'{", ".join(alt)}">{"".join(parts)}</div>')
+
+
+def post_slug(run, sess):
+    base = re.sub(r"[^a-z0-9]+", "-", session_label(run, sess).lower()).strip("-")
+    return f"{run['date']}-{base}"
 
 
 def fmt_run(run, sess):
     day = run["date"].strftime("%a %b %-d")
     tags = " ".join(f"`{k}`" for k in keywords(run, sess))
-    out = [f"**{day} — {session_label(run, sess)}**  ",
+    out = [f"**[{day} — {session_label(run, sess)}](/posts/runs/{post_slug(run, sess)}/)**  ",
            f"{run['km']:.2f} km · {run['time']} · {run['pace']}/km · "
            f"HR {run['hr']} avg / {run['hrmax']} max  ",
            tags + "  ",
-           execution_line(run, sess)]
+           execution_line(run, sess),
+           "", zone_band(run)]
     note = ANNOTATIONS.get(str(run["date"]), {}).get("note")
     if note:
         out.append(f"\n> {note}")
@@ -388,12 +487,13 @@ def write_run_posts(runs, sessions):
     for r in runs:
         sess = planned.get(r["date"])
         label = session_label(r, sess).replace("'", "′")
-        slug = re.sub(r"[^a-z0-9]+", "-",
-                      session_label(r, sess).lower()).strip("-")
         tags = ["run"] + [k for k in keywords(r, sess) if "%" not in k]
         wk = week_no(r["date"])
-        note = ANNOTATIONS.get(str(r["date"]), {}).get("note", "")
-        (outdir / f"{r['date']}-{slug}.md").write_text(f"""+++
+        ann = ANNOTATIONS.get(str(r["date"]), {})
+        note = ann.get("note", "")
+        read = ann.get("analysis", "")
+        coach = f"## The coach's read\n\n{read}\n" if read else ""
+        (outdir / f"{post_slug(r, sess)}.md").write_text(f"""+++
 title = "{label} — {r['km']:.1f} km"
 date = {r['date']}
 tags = {json.dumps(tags)}
@@ -404,8 +504,11 @@ summary = "Week {wk}: {r['km']:.2f} km · {r['time']} · {r['pace']}/km · HR {r
 
 {execution_line(r, planned.get(r['date']))}
 
+{zone_band(r)}
+
 {f'> {note}' if note else ''}
 
+{coach}
 Part of [week {wk}](/running/log/) of the [30 km build](/running/program/).
 """)
 

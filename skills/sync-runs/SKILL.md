@@ -38,9 +38,12 @@ Read the new entries at the end of `run-log.org` and today's row in
 ## 3. Publish (standing rule — do without being asked)
 
 Follow `~/org/CLAUDE.md` → "Running blog": regenerate
-(`cd ~/blog && python3 scripts/generate_training_pages.py`), add an
-`ANNOTATIONS` entry in that script for each notable run (long/race/off-plan
-always; routine runs only if something happened), rerun the generator,
+(`cd ~/blog && python3 scripts/generate_training_pages.py`), then annotate
+in that script's `ANNOTATIONS`: EVERY new run gets an `analysis` — the
+coach's read, a 3-5 sentence analytical paragraph (plan vs execution, zone
+discipline, wellness/foot context, what it means for the week) shown on the
+single-run post; notable runs (long/race/off-plan/turning points) also get
+a short `note` for the timeline. Rerun the generator,
 deploy with `~/blog/scripts/deploy.sh` (Hugo build + rsync to the VPS,
 unmetered, ~2 s), verify the live pages, then commit + push for history
 (pushing does NOT deploy).
