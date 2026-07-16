@@ -41,4 +41,6 @@ Follow `~/org/CLAUDE.md` → "Running blog": regenerate
 (`cd ~/blog && python3 scripts/generate_training_pages.py`), add an
 `ANNOTATIONS` entry in that script for each notable run (long/race/off-plan
 always; routine runs only if something happened), rerun the generator,
-`hugo --gc --minify`, commit, push (push = deploy), verify the live pages.
+deploy with `~/blog/scripts/deploy.sh` (Hugo build + rsync to the VPS,
+unmetered, ~2 s), verify the live pages, then commit + push for history
+(pushing does NOT deploy).

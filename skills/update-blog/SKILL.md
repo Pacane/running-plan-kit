@@ -5,7 +5,8 @@ description: Regenerate the training pages and deploy the blog (stacktrace.run) 
 
 # Update + deploy the blog
 
-Repo: `~/blog` (Hugo + PaperMod + ox-hugo → Netlify at https://stacktrace.run).
+Repo: `~/blog` (Hugo + PaperMod + ox-hugo → nginx on Joel's VPS,
+https://stacktrace.run).
 Full conventions: `~/blog/CLAUDE.md` and `~/blog/README.md`.
 
 ## Steps
@@ -22,13 +23,15 @@ Full conventions: `~/blog/CLAUDE.md` and `~/blog/README.md`.
        (revert-buffer :ignore-auto :noconfirm)
        (prog1 (org-hugo-export-wim-to-md :all-subtrees) (kill-buffer))))'
    ```
-3. **Build check**: `hugo --gc --minify` — then confirm any NEW page exists
-   under `public/` before pushing (future-dated pages are silently skipped;
-   use today's real date).
-4. **Commit + push** — push IS the deploy (repo linked to Netlify).
-   Commits are SSH-signed via 1Password: "failed to write commit object"
-   means it's locked → ask the user to unlock, never disable signing.
+3. **Build + confirm**: any NEW page must exist under `public/` after the
+   build (future-dated pages are silently skipped; use today's real date).
+4. **Deploy**: `scripts/deploy.sh` — Hugo build + rsync to the VPS webroot
+   (`stacktrace.ca:/srv/http/stacktrace.run/`, joel-owned, no sudo).
+   Unmetered — deploy as often as needed.
 5. **Verify live**: curl the changed pages on https://stacktrace.run.
+6. **Commit + push for history** (does not deploy). Commits are SSH-signed
+   via 1Password: "failed to write commit object" means it's locked → ask
+   the user to unlock, never disable signing.
 
 ## Conventions
 
