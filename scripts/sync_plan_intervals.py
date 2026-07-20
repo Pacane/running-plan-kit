@@ -107,8 +107,15 @@ def hr(band):
     return {"easy": "76-84% LTHR", "long": "76-83% LTHR", "recov": "70-80% LTHR"}[band]
 
 
-EASY_MIN = int(os.environ.get("INTERVALS_EASY_MIN", "35"))  # easy-run minutes; nudge ~5%/wk by feel
-EASY = f"- {EASY_MIN}m {hr('easy')}"
+EASY_MIN = int(os.environ.get("INTERVALS_EASY_MIN", "35"))  # base easy-run minutes
+# Sensation-gated easy-run progression: weeks listed here override EASY_MIN.
+# Keep past weeks' values intact (the blog reads history from the agenda).
+# 2026-07-20: wk-4 gate passed (foot <=1 through deload, RHR/HRV green) -> 40'.
+EASY_MIN_BY_WEEK = {w: 40 for w in range(4, 19)}
+
+
+def easy_min(week):
+    return EASY_MIN_BY_WEEK.get(week, EASY_MIN)
 
 
 def dstr(monday, offset):
@@ -134,9 +141,11 @@ def ev(date, name, desc, tag):
 def build_events():
     out = []
     for i, (mon, ml, lng) in enumerate(WEEKS, 1):
-        out.append(ev(dstr(mon, 0), f"S{i} Easy {EASY_MIN}' Z2 (+ strength A)", EASY, f"{i}-mon"))
+        em = easy_min(i)
+        easy_desc = f"- {em}m {hr('easy')}"
+        out.append(ev(dstr(mon, 0), f"S{i} Easy {em}' Z2 (+ strength A)", easy_desc, f"{i}-mon"))
         out.append(ev(dstr(mon, 2), f"S{i} Medium-long {ml}' Z2", f"- {ml}m {hr('easy')}", f"{i}-wed"))
-        out.append(ev(dstr(mon, 3), f"S{i} Easy {EASY_MIN}' Z2 (+ strength B)", EASY, f"{i}-thu"))
+        out.append(ev(dstr(mon, 3), f"S{i} Easy {em}' Z2 (+ strength B)", easy_desc, f"{i}-thu"))
         if i == 6:  # UTFS 10 km trail race: REAL fixed date (Sun), on a deload week
             out.append(ev(dstr(mon, 5), f"S{i} Easy shakeout 25' Z1 (optional/rest)",
                           f"- 25m {hr('recov')}", f"{i}-sat"))

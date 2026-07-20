@@ -46,7 +46,10 @@ NO_TARGET = {"workoutTargetTypeId": 1, "workoutTargetTypeKey": "no.target"}
 # frequency for the chronic plantar fasciopathy), B on Thursdays. Strength always AFTER
 # a run, never the day before the long run.
 # ISO is deliberately NOT scheduled (it's an as-needed flare-up option).
+# Wed (2) added 2026-07-20: wk-4 gate passed -> full Rathleff 3x/wk dose
+# (Mon + Wed post-ML + Sat post-long-run).
 SCHED_WEEKDAY = {0: "Strength A - calf/plantar (HSR, slow tempo)",
+                 2: "Strength A - calf/plantar (HSR, slow tempo)",
                  3: "Strength B - quad/knee/hip (slow tempo)",
                  5: "Strength A - calf/plantar (HSR, slow tempo)"}
 # Saturdays where the post-long-run A must NOT land: race day, day-before-race,
