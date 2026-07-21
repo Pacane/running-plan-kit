@@ -163,6 +163,21 @@ ANNOTATIONS = {
                     "needling room to settle. Small decisions, correctly "
                     "sequenced.",
     },
+    "2026-07-20": {
+        "keywords": ["week 4 opens"],
+        "note": "Week 4, day 1: gate passed in the morning, prescription "
+                "delivered in the evening — 83 % Z2 at HR 136.",
+        "analysis": "Week 4 opens with the easy-run archetype: HR 136 "
+                    "average, only 5 % of the run above Zone 2, and a 5:33 "
+                    "pace that fell out of the discipline rather than being "
+                    "chased. One transition artifact: the watch still "
+                    "carried the 35-minute version at run time — the "
+                    "40-minute prescription reached the calendar mid-day — "
+                    "so 37:19 splits the difference; from Wednesday the "
+                    "watch says 40′. The build is back on: the week's real "
+                    "watch-points are the morning scores and the first "
+                    "Wednesday Rathleff dose.",
+    },
     "2026-07-16": {
         "keywords": ["moved up"],
         "note": "Saturday's long run, moved to Thursday (weekend conflict) "
@@ -410,15 +425,17 @@ AGENDA_HEAD = re.compile(r"^\* (DONE )?S(\d+) (.+?)\s+:(\w+):$")
 
 def parse_agenda():
     sessions = []
-    cur = None
+    cur = last = None
     for line in (ORG / "plan-30k-agenda.org").read_text().splitlines():
         if m := AGENDA_HEAD.match(line):
-            cur = {"done": bool(m[1]), "wk": int(m[2]), "title": m[3],
-                   "tag": m[4]}
+            cur, last = {"done": bool(m[1]), "wk": int(m[2]), "title": m[3],
+                         "tag": m[4]}, None
         elif cur and (m := re.search(r"<(\d{4}-\d{2}-\d{2})", line)):
             cur["date"] = dt.date.fromisoformat(m[1])
             sessions.append(cur)
-            cur = None
+            last, cur = cur, None
+        elif last and line.strip() and not line.startswith("*"):
+            last.setdefault("desc", []).append(line.strip().lstrip("- "))
     return sessions
 
 
@@ -430,8 +447,29 @@ def chip_label(s):
     return ("✓ " if s["done"] else "") + t
 
 
-def write_calendar(sessions):
+def write_calendar(sessions, runs):
     today = dt.date.today()
+    runs_by_date = {r["date"]: r for r in runs}
+    planned = planned_by_date(sessions)
+    pops = []
+
+    def pop_html(pid, s, day):
+        run = runs_by_date.get(day)
+        status = ("&#10003; done" if s["done"]
+                  else "today" if day == today
+                  else "not run" if day < today
+                  else "scheduled")
+        desc = "".join(f"<p>{d}</p>" for d in s.get("desc", []))
+        actual = ""
+        if run and s["tag"] != "strength":
+            actual = (f'<p><strong>Ran:</strong> {run["km"]:.2f} km · '
+                      f'{run["time"]} · {run["pace"]}/km · HR {run["hr"]} avg'
+                      f'</p><p><a href="/posts/runs/{post_slug(run, planned.get(day))}/">'
+                      f'run details &rarr;</a></p>')
+        return (f'<div id="{pid}" hidden><h4>{s["title"]}</h4>'
+                f'<p class="cal-pop-meta">{day.strftime("%A %b %-d")} · '
+                f'week {s["wk"]} · {status}</p>{desc}{actual}</div>')
+
     by_date = {}
     for s in sessions:
         by_date.setdefault(s["date"], []).append(s)
@@ -463,15 +501,50 @@ def write_calendar(sessions):
                 cell = [f'<div class="cal-day{cls}">'
                         f'<span class="cal-date">{day.day}</span>']
                 for s in by_date.get(day, []):
+                    pid = f"pop-{day.isoformat()}-{s['tag']}"
+                    pops.append(pop_html(pid, s, day))
                     cell.append(f'<span class="cal-chip cal-chip--{s["tag"]}"'
+                                f' data-pop="{pid}" role="button" tabindex="0"'
                                 f' title="{s["title"]}">{chip_label(s)}</span>')
                     if st := re.search(r"\(\+ strength (\w)\)", s["title"]):
-                        cell.append(f'<span class="cal-chip cal-chip--str">'
-                                    f"Str {st[1]}</span>")
+                        sid = f"pop-{day.isoformat()}-str"
+                        pops.append(
+                            f'<div id="{sid}" hidden><h4>Strength {st[1]}</h4>'
+                            f'<p class="cal-pop-meta">{day.strftime("%A %b %-d")}'
+                            f' · week {s["wk"]}</p><p>Done after the day\'s '
+                            f'easy run — never the day before the long run.</p>'
+                            f'<p><a href="/running/strength/">the strength '
+                            f'program &rarr;</a></p></div>')
+                        cell.append(f'<span class="cal-chip cal-chip--str"'
+                                    f' data-pop="{sid}" role="button"'
+                                    f' tabindex="0">Str {st[1]}</span>')
                 cell.append("</div>")
                 html.append("".join(cell))
         html.append("</div></section></div>")
 
+    html.append('<div class="cal-pops" hidden>' + "".join(pops) + "</div>")
+    html.append("""<div class="cal-overlay" id="cal-overlay" hidden>
+<div class="cal-card" id="cal-card"></div></div>
+<script>
+(function () {
+  var ov = document.getElementById('cal-overlay');
+  var card = document.getElementById('cal-card');
+  function open(c) {
+    var p = document.getElementById(c.dataset.pop);
+    if (!p) return;
+    card.innerHTML = p.innerHTML;
+    ov.hidden = false;
+  }
+  document.querySelectorAll('.cal-chip[data-pop]').forEach(function (c) {
+    c.addEventListener('click', function (e) { e.stopPropagation(); open(c); });
+    c.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(c); }
+    });
+  });
+  ov.addEventListener('click', function (e) { if (e.target === ov) ov.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') ov.hidden = true; });
+})();
+</script>""")
     (BLOG / "content/running/calendar.md").write_text(f"""+++
 title = "Program calendar"
 date = {PLAN_START}
@@ -651,7 +724,7 @@ if __name__ == "__main__":
     sessions = parse_agenda()
     write_log(runs, sessions)
     write_health()
-    write_calendar(sessions)
+    write_calendar(sessions, runs)
     write_weeks_json(runs, sessions)
     write_run_posts(runs, sessions)
     write_prompt_template()
