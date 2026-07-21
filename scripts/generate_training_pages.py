@@ -230,6 +230,48 @@ def planned_by_date(sessions):
     return d
 
 
+# Hand-curated non-run activities worth a timeline entry + post (runs come
+# from run-log.org; these are the occasional hikes / cross-training days).
+EXTRA_ACTIVITIES = [
+    {"date": dt.date(2026, 7, 21),
+     "title": "Hike — Pic-de-la-Tête-de-Chien (Monts-Valin)",
+     "km": 8.85, "moving": "2:04", "elapsed": "3:28",
+     "hr": 88, "hrmax": 129, "dplus": 533,
+     "tags": ["hike", "cross-training", "utfs-prep"],
+     "note": "Optional-day mountain: 533 m of climb at an average HR of 88 "
+             "— the fjord view came basically free. Right foot slightly "
+             "tight by the end; the known, load-responsive pattern.",
+     "analysis": "The number that matters is 88 — the average heart rate "
+                 "for two hours of moving time over 533 m of climb. "
+                 "Aerobically this was a non-event, which is exactly what "
+                 "an optional day should be; the load landed on the "
+                 "structures instead: uneven ground, a bigger climb than "
+                 "the guidebook promised, and a long walked descent. The "
+                 "right foot answered with some end-of-day tightness — "
+                 "the familiar load-responsive kind, not a flare. As UTFS "
+                 "preparation it was more specific than any road run: "
+                 "that race is this terrain, plus intent. It doesn't "
+                 "count a metre toward run volume, and doesn't need to."},
+]
+
+
+def extra_slug(e):
+    base = re.sub(r"[^a-z0-9]+", "-", e["title"].lower()).strip("-")
+    return f"{e['date']}-{base}"
+
+
+def fmt_extra(e):
+    day = e["date"].strftime("%a %b %-d")
+    tags = " ".join(f"`{k}`" for k in e["tags"])
+    out = [f"**[{day} — {e['title']}](/posts/runs/{extra_slug(e)}/)**  ",
+           f"{e['km']:.2f} km · {e['moving']} moving ({e['elapsed']} elapsed)"
+           f" · {e['dplus']} m D+ · HR {e['hr']} avg / {e['hrmax']} max  ",
+           tags]
+    if e.get("note"):
+        out.append(f"\n> {e['note']}")
+    return "\n".join(out)
+
+
 RUN_HEAD = re.compile(
     r"^\* (\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}) — (.+?) \((\w+)\)\s+\(id (\S+)\)"
 )
@@ -360,7 +402,9 @@ def write_log(runs, sessions):
     planned = planned_by_date(sessions)
     by_week = {}
     for r in runs:
-        by_week.setdefault(week_no(r["date"]), []).append(r)
+        by_week.setdefault(week_no(r["date"]), []).append(("run", r))
+    for e in EXTRA_ACTIVITIES:
+        by_week.setdefault(week_no(e["date"]), []).append(("extra", e))
     parts = [f"""+++
 title = "Training log"
 date = {PLAN_START}
@@ -378,15 +422,17 @@ each. The plan behind it: [as designed](/running/program-original/) ·
         wtype, vol, longrun = WEEKS[wk]
         start = PLAN_START + dt.timedelta(weeks=wk - 1)
         end = start + dt.timedelta(days=6)
-        done = sum(r["km"] for r in by_week[wk])
+        done = sum(r["km"] for kind, r in by_week[wk] if kind == "run")
         parts.append(
             f"## Week {wk} — {wtype} "
             f"({start.strftime('%b %-d')}–{end.strftime('%b %-d')})\n\n"
             f"Target ~{vol} km · long run: {longrun} · "
             f"ran {done:.1f} km{' so far' if end >= today else ''}\n")
-        parts += [fmt_run(r, planned.get(r["date"])) + "\n"
-                  for r in sorted(by_week[wk], key=lambda r: r["date"],
-                                  reverse=True)]
+        parts += [(fmt_run(x, planned.get(x["date"])) if kind == "run"
+                   else fmt_extra(x)) + "\n"
+                  for kind, x in sorted(by_week[wk],
+                                        key=lambda kx: kx[1]["date"],
+                                        reverse=True)]
     (BLOG / "content/running/log.md").write_text("\n".join(parts))
 
 
@@ -719,6 +765,28 @@ for my setup, in conversation with an AI, and it shows in the best way.
 """)
 
 
+def write_extra_posts():
+    outdir = BLOG / "content/posts/runs"
+    for e in EXTRA_ACTIVITIES:
+        read = e.get("analysis", "")
+        coach = f"## The coach's read\n\n{read}\n" if read else ""
+        wk = week_no(e["date"])
+        (outdir / f"{extra_slug(e)}.md").write_text(f"""+++
+title = "{e['title']} — {e['km']:.1f} km"
+date = {e['date']}
+tags = {json.dumps(e['tags'])}
+summary = "Week {wk}: {e['km']:.2f} km · {e['moving']} moving · {e['dplus']} m D+ · HR {e['hr']}"
++++
+
+{e['km']:.2f} km · {e['moving']} moving ({e['elapsed']} elapsed) · {e['dplus']} m D+ · HR {e['hr']} avg / {e['hrmax']} max
+
+{f'> {e["note"]}' if e.get("note") else ''}
+
+{coach}
+Part of [week {wk}](/running/log/) of the [30 km build](/running/program/).
+""")
+
+
 if __name__ == "__main__":
     runs = parse_runs()
     sessions = parse_agenda()
@@ -727,6 +795,7 @@ if __name__ == "__main__":
     write_calendar(sessions, runs)
     write_weeks_json(runs, sessions)
     write_run_posts(runs, sessions)
+    write_extra_posts()
     write_prompt_template()
     publish_scripts()
     print(f"log.md: {len(runs)} runs · health.md · "
