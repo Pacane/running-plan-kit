@@ -15,10 +15,14 @@ numbers can't (why a run mattered, what was decided).
 import calendar as callib
 import datetime as dt
 import json
+import os
 import re
 from pathlib import Path
 
-ORG = Path.home() / "org"
+# Data source: the coaching workspace. Defaults to ~/org (Mac production);
+# the VPS trial sets COACH_WORKSPACE=~/coach-workspace. Layout difference:
+# in a workspace clone, course.org and the template live at the repo root.
+ORG = Path(os.environ.get("COACH_WORKSPACE", str(Path.home() / "org"))).expanduser()
 BLOG = Path(__file__).resolve().parent.parent
 PLAN_START = dt.date(2026, 6, 29)
 
@@ -162,6 +166,41 @@ ANNOTATIONS = {
                     "A in the evening, one day late to give Monday's dry "
                     "needling room to settle. Small decisions, correctly "
                     "sequenced.",
+    },
+    "2026-07-23": {
+        "keywords": ["aerobic signal"],
+        "note": "First 40-minute easy run of the plan — and the quickest "
+                "easy pace of the build (5:26/km) at the same old HR.",
+        "analysis": "The duration progression executes: 40:36 against the "
+                    "new 40-minute prescription, 80 % Zone 2, ceiling "
+                    "respected. The quiet headline is pace-at-heart-rate: "
+                    "5:26/km at HR 140, where the same effort bought 5:49 "
+                    "two weeks ago and 5:33 on Monday. Nobody chased that — "
+                    "it fell out of four weeks of discipline, which is "
+                    "the entire Zone 2 thesis in one data point. Fourth "
+                    "run of the week, every one inside its lines.",
+    },
+    "2026-07-22": {
+        "keywords": ["first full ML"],
+        "note": "First full-length medium-long of the build — 81 % Z2 on "
+                "the cap, hours after needle #2 and a day after a mountain. "
+                "First Wednesday Rathleff dose done after.",
+        "analysis": "The week-4 template's densest day, delivered on "
+                    "schedule: 56:20 against a 54-minute cap, 81 % Zone 2, "
+                    "max HR 150 — controlled from first to last. Context "
+                    "makes it better: this was the longest on-plan midweek "
+                    "run of the build (9.82 km), run the evening after a "
+                    "533 m mountain day and roughly 24 hours after the "
+                    "second needling session, and it still stayed inside "
+                    "every line. The first Wednesday strength dose followed "
+                    "— the 3×/week treatment protocol is now fully in "
+                    "motion. This morning's HRV dip (56, from 67) is what "
+                    "absorbing looks like; the 7-day means are holding. "
+                    "Thursday's score carries the needle-echo asterisk; "
+                    "clean reads resume Friday. One more data point worth "
+                    "keeping: the needled foot stung intermittently through "
+                    "the day, then went completely silent under load — the "
+                    "pattern that keeps pointing at muscle, not structure.",
     },
     "2026-07-20": {
         "keywords": ["week 4 opens"],
